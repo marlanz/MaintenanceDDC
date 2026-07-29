@@ -25,8 +25,9 @@ export const createUserProfileSchema = z.object({
     .max(20, "Employee code must not exceed 20 characters")
     .regex(
       /^[A-Z0-9_-]+$/,
-      "Employee code must contain only uppercase letters, numbers, underscores, or hyphens"
+      "Employee code must contain only uppercase letters, numbers, underscores, or hyphens",
     ),
+  fullName: z.string().min(1, "Full name is required"),
   role: allRolesEnum,
   workshopId: objectIdSchema,
   teamId: objectIdSchema,
@@ -47,9 +48,9 @@ export const selfRegisterProfileSchema = createUserProfileSchema.extend({
     .refine(
       (val) =>
         !ADMIN_GRANTED_ROLES.includes(
-          val as (typeof ADMIN_GRANTED_ROLES)[number]
+          val as (typeof ADMIN_GRANTED_ROLES)[number],
         ),
-      { message: "This role must be assigned by an administrator" }
+      { message: "This role must be assigned by an administrator" },
     ),
 });
 
@@ -66,6 +67,8 @@ export const assignRoleSchema = z.object({
 });
 
 export type CreateUserProfileInput = z.infer<typeof createUserProfileSchema>;
-export type SelfRegisterProfileInput = z.infer<typeof selfRegisterProfileSchema>;
+export type SelfRegisterProfileInput = z.infer<
+  typeof selfRegisterProfileSchema
+>;
 export type UpdateUserProfileInput = z.infer<typeof updateUserProfileSchema>;
 export type AssignRoleInput = z.infer<typeof assignRoleSchema>;

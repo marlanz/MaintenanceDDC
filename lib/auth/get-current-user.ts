@@ -22,7 +22,9 @@ export async function getCurrentUser(): Promise<CurrentAuthUser | null> {
 
     await connectDB();
 
-    const profile = await UserProfile.findOne({ userId: session.user.id }).lean();
+    const profile = await UserProfile.findOne({
+      userId: session.user.id,
+    }).lean();
 
     if (!profile || !profile.isActive) {
       return null;
@@ -40,6 +42,7 @@ export async function getCurrentUser(): Promise<CurrentAuthUser | null> {
       teamId: profile.teamId.toString(),
       phone: profile.phone,
       isActive: profile.isActive,
+      fullName: profile.fullName,
     };
   } catch {
     return null;
@@ -84,10 +87,11 @@ export async function sessionExistsButNoProfile(): Promise<boolean> {
     if (!session?.user) return false;
 
     await connectDB();
-    const profile = await UserProfile.findOne({ userId: session.user.id }).lean();
+    const profile = await UserProfile.findOne({
+      userId: session.user.id,
+    }).lean();
     return !profile;
   } catch {
     return false;
   }
 }
-

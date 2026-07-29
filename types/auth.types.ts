@@ -34,6 +34,7 @@ export interface CurrentAuthUser {
   team?: ITeam;
   phone?: string | null;
   isActive: boolean;
+  fullName: string;
 }
 
 export interface AuthSession {

@@ -16,6 +16,7 @@ export interface IUserProfile {
   /** Reference to Better Auth user._id (stored as string by Better Auth) */
   userId: string;
   employeeCode: string;
+  fullName: string;
   role: UserRoleType;
   /** Reference to Workshop._id */
   workshopId: Types.ObjectId;

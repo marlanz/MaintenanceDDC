@@ -69,3 +69,12 @@ export const ALL_ROLES = Object.values(UserRole) as [
   UserRoleType,
   ...UserRoleType[],
 ];
+
+export const USER_ROLE_VN_LABELS: Record<UserRoleType, string> = {
+  [UserRole.WORKER]: "Công nhân",
+  [UserRole.TECHNICIAN]: "Kỹ thuật viên",
+  [UserRole.TEAM_LEADER]: "Trưởng nhóm",
+  [UserRole.ASSET_MANAGER]: "Quản lý tài sản",
+  [UserRole.MAINTENANCE_MANAGER]: "Quản lý bảo trì",
+  [UserRole.ADMIN]: "Quản trị viên",
+};

@@ -11,11 +11,10 @@ export default function LoginButton() {
     try {
       await authClient.signIn.social({
         provider: "google",
-        callbackURL: "/",
+        callbackURL: "/first-login",
         // errorCallbackURL: "/",
       });
     } finally {
-      // Don't setLoading(false) here, as redirect will happen
       setLoading(false);
     }
   };

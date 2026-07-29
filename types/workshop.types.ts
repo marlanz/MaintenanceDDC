@@ -8,8 +8,8 @@ import type { Types, Document, Model } from "mongoose";
 export interface IWorkshop {
   workshopCode: string;
   workshopName: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export type WorkshopDocument = IWorkshop & Document<Types.ObjectId>;

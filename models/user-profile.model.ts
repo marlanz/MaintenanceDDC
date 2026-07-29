@@ -1,6 +1,9 @@
 import mongoose, { Schema } from "mongoose";
 import { ALL_ROLES, UserRole } from "@/constants/roles";
-import type { IUserProfile, UserProfileModel } from "@/types/user-profile.types";
+import type {
+  IUserProfile,
+  UserProfileModel,
+} from "@/types/user-profile.types";
 
 /**
  * UserProfile — business extension of Better Auth's user.
@@ -33,6 +36,11 @@ const userProfileSchema = new Schema<IUserProfile>(
       required: [true, "Employee code is required"],
       unique: true,
       trim: true,
+      uppercase: true,
+    },
+    fullName: {
+      type: String,
+      required: [true, "Full name is required"],
       uppercase: true,
     },
     role: {
@@ -68,7 +76,7 @@ const userProfileSchema = new Schema<IUserProfile>(
   {
     timestamps: true,
     collection: "user_profiles",
-  }
+  },
 );
 
 userProfileSchema.index({ userId: 1 }, { unique: true });
@@ -85,7 +93,7 @@ const UserProfile =
   (mongoose.models.UserProfile as UserProfileModel) ||
   mongoose.model<IUserProfile, UserProfileModel>(
     "UserProfile",
-    userProfileSchema
+    userProfileSchema,
   );
 
 export default UserProfile;

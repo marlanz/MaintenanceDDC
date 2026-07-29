@@ -35,8 +35,7 @@ export function NavSidebar({ onNavClick }: NavSidebarProps) {
       {/* Brand Header */}
       <div className="h-16 flex items-center px-6 border-b">
         <div className="flex items-center gap-2 font-bold text-lg text-primary">
-          <Wrench className="h-6 w-6" />
-          <span>MAINTENANCE-DDC</span>
+          <span className="text-center">Hệ thống Báo cáo sữa chữa DDC</span>
         </div>
       </div>
 
@@ -56,7 +55,7 @@ export function NavSidebar({ onNavClick }: NavSidebarProps) {
                 "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
                 isActive
                   ? "bg-primary text-primary-foreground font-semibold"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
             >
               <Icon className="h-4 w-4" />

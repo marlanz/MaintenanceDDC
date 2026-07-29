@@ -11,6 +11,7 @@ import { selfRegisterProfileSchema } from "@/schemas/user-profile.schema";
 import type { ApiResponse, ApiErrorResponse } from "@/types/api.types";
 
 interface SelfRegisterPayload {
+  fullName: string;
   employeeCode: string;
   role: string;
   workshopId: string;
@@ -19,7 +20,7 @@ interface SelfRegisterPayload {
 }
 
 export async function selfRegisterProfileAction(
-  rawData: SelfRegisterPayload
+  rawData: SelfRegisterPayload,
 ): Promise<ApiResponse<{ profileId: string }> | ApiErrorResponse> {
   try {
     // 1. Must have an active Better Auth session
@@ -49,47 +50,49 @@ export async function selfRegisterProfileAction(
       ...rawData,
     });
 
-    // 4. Validate workshop exists
-    const workshop = await Workshop.findById(parsed.workshopId);
-    if (!workshop) {
-      return {
-        success: false,
-        error: {
-          code: "NOT_FOUND",
-          message: "Selected workshop does not exist.",
-        },
-      };
-    }
+    // // 4. Validate workshop exists
+    // const workshop = await Workshop.findById(parsed.workshopId);
+    // if (!workshop) {
+    //   return {
+    //     success: false,
+    //     error: {
+    //       code: "NOT_FOUND",
+    //       message: "Selected workshop does not exist.",
+    //     },
+    //   };
+    // }
 
-    // 5. Validate team exists and belongs to workshop
-    const team = await Team.findById(parsed.teamId);
-    if (!team) {
-      return {
-        success: false,
-        error: {
-          code: "NOT_FOUND",
-          message: "Selected team does not exist.",
-        },
-      };
-    }
-    if (team.workshopId.toString() !== parsed.workshopId) {
-      return {
-        success: false,
-        error: {
-          code: "BUSINESS_ERROR",
-          message: "Selected team does not belong to the selected workshop.",
-        },
-      };
-    }
+    // // 5. Validate team exists and belongs to workshop
+    // const team = await Team.findById(parsed.teamId);
+    // if (!team) {
+    //   return {
+    //     success: false,
+    //     error: {
+    //       code: "NOT_FOUND",
+    //       message: "Selected team does not exist.",
+    //     },
+    //   };
+    // }
+    // if (team.workshopId.toString() !== parsed.workshopId) {
+    //   return {
+    //     success: false,
+    //     error: {
+    //       code: "BUSINESS_ERROR",
+    //       message: "Selected team does not belong to the selected workshop.",
+    //     },
+    //   };
+    // }
 
     // 6. Check employee code uniqueness
-    const codeExists = await UserProfile.findOne({ employeeCode: parsed.employeeCode.toUpperCase() }).lean();
+    const codeExists = await UserProfile.findOne({
+      employeeCode: parsed.employeeCode.toUpperCase(),
+    }).lean();
     if (codeExists) {
       return {
         success: false,
         error: {
           code: "CONFLICT",
-          message: `Employee code "${parsed.employeeCode.toUpperCase()}" is already in use. Please use a different code.`,
+          message: `Mã nhân viên "${parsed.employeeCode.toUpperCase()}" đã tồn tại. Hãy sử dụng mã nhân viên khác`,
         },
       };
     }
@@ -97,6 +100,7 @@ export async function selfRegisterProfileAction(
     // 7. Create the profile
     const created = await UserProfile.create({
       userId: sessionUser.id,
+      fullName: parsed.fullName,
       employeeCode: parsed.employeeCode.toUpperCase(),
       role: parsed.role,
       workshopId: parsed.workshopId,
