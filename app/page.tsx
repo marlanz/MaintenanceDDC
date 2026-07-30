@@ -1,6 +1,3 @@
-import { auth } from "@/lib/auth";
-import { getSession } from "better-auth/api";
-import { headers } from "next/headers";
 import Image from "next/image";
 import { Suspense } from "react";
 import UserInfo from "./(auth)/login/_component/user-info";

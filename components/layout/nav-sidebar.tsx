@@ -35,7 +35,7 @@ export function NavSidebar({ onNavClick }: NavSidebarProps) {
       {/* Brand Header */}
       <div className="h-16 flex items-center px-6 border-b">
         <div className="flex items-center gap-2 font-bold text-lg text-primary">
-          <span className="text-center">Hệ thống Báo cáo sữa chữa DDC</span>
+          <span className="">Hệ thống Báo cáo sữa chữa DDC</span>
         </div>
       </div>
 

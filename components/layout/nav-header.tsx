@@ -51,10 +51,10 @@ export function NavHeader({ user }: NavHeaderProps) {
         <div className="flex items-center gap-3 ml-auto">
           <div className="text-right hidden sm:block">
             <div className="text-sm font-medium leading-none">
-              {user.fullName}
+              Chào ngày mới, <span className="font-bold">{user.fullName}</span>
             </div>
-            <div className="text-xs text-muted-foreground font-mono mt-1">
-              {USER_ROLE_VN_LABELS[user.role]}
+            <div className="text-xs text-muted-foreground font-mono mt-1 font-semibold">
+              {USER_ROLE_VN_LABELS[user.role]} - Mã NV: {user.employeeCode}
             </div>
           </div>
           <div className="h-9 w-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm">
