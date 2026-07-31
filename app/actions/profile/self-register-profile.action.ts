@@ -24,7 +24,9 @@ export interface SelfRegisterPayload {
 
 export async function selfRegisterProfileAction(
   rawData: SelfRegisterPayload,
-): Promise<ApiResponse<{ profileId?: string }> | ApiErrorResponse> {
+): Promise<
+  ApiResponse<{ profileId?: string; newProfile: boolean }> | ApiErrorResponse
+> {
   try {
     // Authentication
     const sessionUser = await getSessionUser();
@@ -48,18 +50,29 @@ export async function selfRegisterProfileAction(
     // Business
     const result = await accountService.selfRegisterProfile(payload);
 
-    if (result.redirectTo) {
-      redirect(result.redirectTo);
+    if (result.hasProfile) {
+      return {
+        success: true,
+        data: {
+          newProfile: false,
+        },
+        message: "User already has a profile.",
+      };
     }
 
     return {
       success: true,
       data: {
         profileId: result.profileId,
+        newProfile: true,
       },
       message: "Profile created successfully.",
     };
   } catch (error) {
+    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
+      throw error;
+    }
+
     if (error instanceof ConflictError) {
       return {
         success: false,
@@ -80,10 +93,6 @@ export async function selfRegisterProfileAction(
           details: error.flatten().fieldErrors,
         },
       };
-    }
-
-    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
-      throw error;
     }
 
     return {

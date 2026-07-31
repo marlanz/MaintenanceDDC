@@ -8,14 +8,14 @@ type SelfRegisterProfilePayload = SelfRegisterPayload & { userId: string };
 
 export async function selfRegisterProfile(
   input: SelfRegisterProfilePayload,
-): Promise<{ redirectTo?: string; profileId?: string }> {
+): Promise<{ hasProfile?: boolean; profileId?: string }> {
   await connectDB();
 
   const existing = await accountRepository.findProfileByUserId(input.userId);
 
   if (existing) {
     return {
-      redirectTo: "/machines",
+      hasProfile: true,
     };
   }
 
@@ -32,6 +32,7 @@ export async function selfRegisterProfile(
 
   return {
     profileId: profile._id.toString(),
+    hasProfile: true,
   };
 }
 

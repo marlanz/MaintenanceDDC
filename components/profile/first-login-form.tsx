@@ -124,8 +124,7 @@ export function FirstLoginForm({
       }
 
       toast.success("Tạo hồ sơ thành công! Đang chuyển hướng...");
-      router.push("/machines");
-      router.refresh();
+      router.replace("/machines");
     } catch (error) {
       toast.error("Đã xảy ra lỗi không xác định. Vui lòng thử lại.");
     } finally {
