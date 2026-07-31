@@ -1,11 +1,12 @@
 import UserProfile from "@/models/user-profile.model";
 import { CreateUserProfileInput } from "@/schemas/user-profile.schema";
 import { UserProfileDocument } from "@/types";
+import { ConflictError } from "@/lib/errors/conflict-error";
 
 export async function findEmployeeByCode(
-  sessionId: string,
+  code: string,
 ): Promise<UserProfileDocument | null> {
-  const doc = await UserProfile.findOne({ userId: sessionId });
+  const doc = await UserProfile.findOne({ employeeCode: code.toUpperCase() });
   return doc as unknown as UserProfileDocument | null;
 }
 
@@ -23,6 +24,13 @@ export async function createProfile(
     isActive: true,
   });
   return doc as unknown as UserProfileDocument;
+}
+
+export async function findProfileByUserId(
+  userId: string,
+): Promise<UserProfileDocument | null> {
+  const doc = await UserProfile.findOne({ userId });
+  return doc as unknown as UserProfileDocument | null;
 }
 
 export async function findAccountById(

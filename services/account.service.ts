@@ -1,4 +1,6 @@
 import { SelfRegisterPayload } from "@/app/actions/profile/self-register-profile.action";
+import { BusinessError } from "@/lib/errors";
+import { ConflictError } from "@/lib/errors/conflict-error";
 import connectDB from "@/lib/mongoose";
 import * as accountRepository from "@/repositories/account.repository";
 
@@ -6,21 +8,21 @@ type SelfRegisterProfilePayload = SelfRegisterPayload & { userId: string };
 
 export async function selfRegisterProfile(
   input: SelfRegisterProfilePayload,
-): Promise<{ redirectTo?: string; profileId: string }> {
+): Promise<{ redirectTo?: string; profileId?: string }> {
   await connectDB();
 
-  const existing = await accountRepository.findAccountById(input.userId);
+  const existing = await accountRepository.findProfileByUserId(input.userId);
 
   if (existing) {
     return {
       redirectTo: "/machines",
-      profileId: "",
     };
   }
 
   //   TODO: add data for workshop and team for validation
   //   await validateWorkshopAndTeam(input.workshopId, input.teamId);
 
+  // Check for duplicate employee code
   await ensureEmployeeCodeUnique(input.employeeCode);
 
   const profile = await accountRepository.createProfile({
@@ -34,14 +36,13 @@ export async function selfRegisterProfile(
 }
 
 async function ensureEmployeeCodeUnique(employeeCode: string) {
-  const existing = await accountRepository.findEmployeeByCode(employeeCode);
+  const existing = await accountRepository.findEmployeeByCode(
+    employeeCode.toUpperCase(),
+  );
+
   if (existing) {
-    return {
-      success: false,
-      error: {
-        code: "CONFLICT",
-        message: `Mã nhân viên "${employeeCode.toUpperCase()}" đã tồn tại. Hãy sử dụng mã nhân viên khác`,
-      },
-    };
+    throw new ConflictError(
+      `Mã nhân viên "${employeeCode.toUpperCase()}" đã tồn tại.`,
+    );
   }
 }
