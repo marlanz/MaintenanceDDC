@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState, useTransition, useEffect } from "react";
+import { useState, useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Search, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,12 +11,15 @@ export function MachineSearchBar() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const [query, setQuery] = useState(searchParams.get("query") || "");
-  const [isPending, startTransition] = useTransition();
+  const queryParam = searchParams.get("query") || "";
+  const [query, setQuery] = useState(queryParam);
+  const [prevQueryParam, setPrevQueryParam] = useState(queryParam);
+  const [, startTransition] = useTransition();
 
-  useEffect(() => {
-    setQuery(searchParams.get("query") || "");
-  }, [searchParams]);
+  if (queryParam !== prevQueryParam) {
+    setPrevQueryParam(queryParam);
+    setQuery(queryParam);
+  }
 
   const handleSearch = (term: string) => {
     setQuery(term);

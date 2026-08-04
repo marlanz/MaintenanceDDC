@@ -4,7 +4,7 @@ import {
   sessionExistsButNoProfile,
 } from "@/lib/auth/get-current-user";
 import { NavHeader } from "@/components/layout/nav-header";
-import { NavSidebar } from "@/components/layout/nav-sidebar";
+import { DesktopSidebar } from "@/components/layout/sidebar/DesktopSidebar";
 import { Toaster } from "@/components/ui/sonner";
 
 export default async function DashboardLayout({
@@ -26,9 +26,7 @@ export default async function DashboardLayout({
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:block w-64 shrink-0 h-full">
-        <NavSidebar />
-      </aside>
+      <DesktopSidebar role={user.role} />
 
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col h-full overflow-hidden">
